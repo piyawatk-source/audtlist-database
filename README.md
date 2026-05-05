@@ -47,37 +47,39 @@ audtlist/
 
 ```javascript
 // ดู products ทั้งหมด
-db.products.find({ status: "published" }).sort({ created_at: -1 })
+db.products.find({ status: "published" }).sort({ created_at: -1 });
 
 // ดู orders ของ artist (Marketplace)
-const owv = db.artists.findOne({ slug: "old-world-vultures" })
-db.orders.find({ "items.artist_id": owv._id })
+const owv = db.artists.findOne({ slug: "old-world-vultures" });
+db.orders.find({ "items.artist_id": owv._id });
 
 // ดู album พร้อม tracks (Many-to-Many)
 db.albums.aggregate([
-  { $lookup: {
+  {
+    $lookup: {
       from: "tracks",
       localField: "track_ids",
       foreignField: "_id",
-      as: "tracks_detail"
-  }}
-])
+      as: "tracks_detail",
+    },
+  },
+]);
 ```
 
 ---
 
 ## Collections (8 ตัว)
 
-| Collection | จำนวน | ความสำคัญ |
-|-----------|-------|----------|
-| `users` | unlimited | ผู้ใช้ทุก type (ADMIN/USER/ARTIST) |
-| `genres` | ~10 | Master data ที่ admin จัดการ |
-| `artists` | unlimited | โปรไฟล์ศิลปิน + marketplace fields |
+| Collection | จำนวน     | ความสำคัญ                                 |
+| ---------- | --------- | ----------------------------------------- |
+| `users`    | unlimited | ผู้ใช้ทุก type (ADMIN/USER/ARTIST)        |
+| `genres`   | ~10       | Master data ที่ admin จัดการ              |
+| `artists`  | unlimited | โปรไฟล์ศิลปิน + marketplace fields        |
 | `products` | unlimited | **Sellable Product Layer** (หัวใจของ MOM) |
-| `tracks` | unlimited | ไฟล์เพลง |
-| `albums` | unlimited | รวมเพลงเป็น album (M:N กับ tracks) |
-| `merch` | unlimited | สินค้ากายภาพ + variants embed |
-| `orders` | unlimited | คำสั่งซื้อ + marketplace logic |
+| `tracks`   | unlimited | ไฟล์เพลง                                  |
+| `albums`   | unlimited | รวมเพลงเป็น album (M:N กับ tracks)        |
+| `merch`    | unlimited | สินค้ากายภาพ + variants embed             |
+| `orders`   | unlimited | คำสั่งซื้อ + marketplace logic            |
 
 ---
 
@@ -89,10 +91,11 @@ db.albums.aggregate([
 
 ```javascript
 // Pagination ข้ามทุก type ในที่เดียว
-db.products.find({ status: "published" })
+db.products
+  .find({ status: "published" })
   .sort({ created_at: -1 })
   .skip(20)
-  .limit(10)
+  .limit(10);
 ```
 
 ฟิลด์ที่ทุก product มีร่วมกัน (title, price, cover_url, status) อยู่ที่ products
@@ -153,21 +156,22 @@ artist เลือกหลาย genre ได้ผ่าน `genre_ids` array
 
 ## Indexes ที่สำคัญ
 
-| Collection | Index | จุดประสงค์ |
-|-----------|-------|----------|
-| users | `email` (unique), `username` (unique) | login + ป้องกันสมัครซ้ำ |
-| products | `status, created_at` | หน้า shop pagination |
-| products | `type, status` | filter ตาม type |
-| albums | `track_ids` | หา album ที่มี track นี้ |
-| merch | `variants.sku` | scan SKU ที่หลังเสื้อ |
-| orders | `user_id, created_at` | ดูประวัติของ user |
-| orders | `items.artist_id, items.fulfillment_status` | **artist dashboard** |
+| Collection | Index                                       | จุดประสงค์               |
+| ---------- | ------------------------------------------- | ------------------------ |
+| users      | `email` (unique), `username` (unique)       | login + ป้องกันสมัครซ้ำ  |
+| products   | `status, created_at`                        | หน้า shop pagination     |
+| products   | `type, status`                              | filter ตาม type          |
+| albums     | `track_ids`                                 | หา album ที่มี track นี้ |
+| merch      | `variants.sku`                              | scan SKU ที่หลังเสื้อ    |
+| orders     | `user_id, created_at`                       | ดูประวัติของ user        |
+| orders     | `items.artist_id, items.fulfillment_status` | **artist dashboard**     |
 
 ---
 
 ## Schema Validation
 
 ทุก collection มี **JSON Schema validator** ที่บังคับ:
+
 - Required fields
 - Data types ที่ถูกต้อง
 - Enum values (เช่น user_type, product_type)
@@ -192,6 +196,6 @@ artist เลือกหลาย genre ได้ผ่าน `genre_ids` array
 
 ## ติดต่อ
 
-ผู้รับผิดชอบ: [คุณ]
+ผู้รับผิดชอบ: Piyawat.K
 รอบประชุมที่อ้างอิง: 29/4/2026
 ดูเอกสารเพิ่มเติม: `design_notes.md`
