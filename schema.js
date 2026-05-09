@@ -13,7 +13,6 @@
 // 5. รัน sample_data.js เพื่อใส่ข้อมูลตัวอย่าง (optional)
 // =============================================================================
 
-
 // -----------------------------------------------------------------------------
 // 1. USERS — ผู้ใช้ทั้งหมด (ADMIN, USER, ARTIST)
 // -----------------------------------------------------------------------------
@@ -21,7 +20,13 @@ db.createCollection("users", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
-      required: ["username", "email", "password_hash", "user_type", "created_at"],
+      required: [
+        "username",
+        "email",
+        "password_hash",
+        "user_type",
+        "created_at",
+      ],
       properties: {
         username: { bsonType: "string", minLength: 3, maxLength: 30 },
         email: { bsonType: "string", pattern: "^.+@.+\\..+$" },
@@ -31,15 +36,14 @@ db.createCollection("users", {
         avatar_url: { bsonType: "string" },
         status: { enum: ["active", "inactive", "banned", "deleted"] },
         created_at: { bsonType: "date" },
-        updated_at: { bsonType: "date" }
-      }
-    }
-  }
+        updated_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.users.createIndex({ email: 1 }, { unique: true });
 db.users.createIndex({ username: 1 }, { unique: true });
 print("✅ users collection created");
-
 
 // -----------------------------------------------------------------------------
 // 2. GENRES — Master Data (admin จัดการได้)
@@ -53,15 +57,14 @@ db.createCollection("genres", {
         name: { bsonType: "string", minLength: 1, maxLength: 50 },
         slug: { bsonType: "string", pattern: "^[a-z0-9-]+$" },
         description: { bsonType: "string" },
-        created_at: { bsonType: "date" }
-      }
-    }
-  }
+        created_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.genres.createIndex({ slug: 1 }, { unique: true });
 db.genres.createIndex({ name: 1 }, { unique: true });
 print("✅ genres collection created");
-
 
 // -----------------------------------------------------------------------------
 // 3. ARTISTS — โปรไฟล์ศิลปิน (รองรับ marketplace)
@@ -80,7 +83,7 @@ db.createCollection("artists", {
         banner_url: { bsonType: "string" },
         genre_ids: {
           bsonType: "array",
-          items: { bsonType: "objectId" }
+          items: { bsonType: "objectId" },
         },
         status: { enum: ["active", "inactive", "deleted", "banned"] },
         // Marketplace fields
@@ -91,29 +94,28 @@ db.createCollection("artists", {
             line2: { bsonType: "string" },
             city: { bsonType: "string" },
             postal_code: { bsonType: "string" },
-            country: { bsonType: "string" }
-          }
+            country: { bsonType: "string" },
+          },
         },
         payout_method: {
           bsonType: "object",
           properties: {
             type: { enum: ["bank_transfer", "paypal", "promptpay"] },
-            account_info: { bsonType: "object" }
-          }
+            account_info: { bsonType: "object" },
+          },
         },
         payout_balance: { bsonType: "int", minimum: 0 },
         created_at: { bsonType: "date" },
-        updated_at: { bsonType: "date" }
-      }
-    }
-  }
+        updated_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.artists.createIndex({ slug: 1 }, { unique: true });
 db.artists.createIndex({ user_id: 1 }, { unique: true });
 db.artists.createIndex({ genre_ids: 1 });
 db.artists.createIndex({ status: 1 });
 print("✅ artists collection created");
-
 
 // -----------------------------------------------------------------------------
 // 4. PRODUCTS — Sellable Product Layer (หัวใจของระบบ)
@@ -134,20 +136,21 @@ db.createCollection("products", {
         min_price: { bsonType: "int", minimum: 0 },
         name_your_price: { bsonType: "bool" },
         cover_url: { bsonType: "string" },
-        status: { enum: ["draft", "published", "private", "unavailable", "deleted"] },
+        status: {
+          enum: ["draft", "published", "private", "unavailable", "deleted"],
+        },
         deleted_at: { bsonType: ["date", "null"] },
         created_at: { bsonType: "date" },
-        updated_at: { bsonType: "date" }
-      }
-    }
-  }
+        updated_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.products.createIndex({ artist_id: 1 });
 db.products.createIndex({ type: 1, status: 1 });
 db.products.createIndex({ status: 1, created_at: -1 });
 db.products.createIndex({ slug: 1 }, { unique: true });
 print("✅ products collection created");
-
 
 // -----------------------------------------------------------------------------
 // 5. TRACKS — รายละเอียดเพลง
@@ -164,14 +167,13 @@ db.createCollection("tracks", {
         preview_url: { bsonType: "string" },
         is_streamable: { bsonType: "bool" },
         is_active: { bsonType: "bool" },
-        created_at: { bsonType: "date" }
-      }
-    }
-  }
+        created_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.tracks.createIndex({ product_id: 1 }, { unique: true });
 print("✅ tracks collection created");
-
 
 // -----------------------------------------------------------------------------
 // 6. ALBUMS — รายละเอียดอัลบั้ม (Many-to-Many กับ tracks ตาม MOM)
@@ -187,17 +189,16 @@ db.createCollection("albums", {
         track_ids: {
           bsonType: "array",
           items: { bsonType: "objectId" },
-          minItems: 1
+          minItems: 1,
         },
-        created_at: { bsonType: "date" }
-      }
-    }
-  }
+        created_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.albums.createIndex({ product_id: 1 }, { unique: true });
 db.albums.createIndex({ track_ids: 1 });
 print("✅ albums collection created");
-
 
 // -----------------------------------------------------------------------------
 // 7. MERCH — สินค้ากายภาพ (เสื้อ, vinyl, cd, ฯลฯ)
@@ -210,7 +211,9 @@ db.createCollection("merch", {
       required: ["product_id", "merch_type", "created_at"],
       properties: {
         product_id: { bsonType: "objectId" },
-        merch_type: { enum: ["tshirt", "vinyl", "cd", "cassette", "poster", "other"] },
+        merch_type: {
+          enum: ["tshirt", "vinyl", "cd", "cassette", "poster", "other"],
+        },
         weight_grams: { bsonType: "int" },
         ships_internationally: { bsonType: "bool" },
         variants: {
@@ -223,19 +226,18 @@ db.createCollection("merch", {
               size: { bsonType: "string" },
               color: { bsonType: "string" },
               stock_quantity: { bsonType: "int", minimum: 0 },
-              sku: { bsonType: "string" }
-            }
-          }
+              sku: { bsonType: "string" },
+            },
+          },
         },
-        created_at: { bsonType: "date" }
-      }
-    }
-  }
+        created_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.merch.createIndex({ product_id: 1 }, { unique: true });
 db.merch.createIndex({ "variants.sku": 1 });
 print("✅ merch collection created");
-
 
 // -----------------------------------------------------------------------------
 // 8. ORDERS — คำสั่งซื้อ (รองรับ marketplace logic)
@@ -254,7 +256,13 @@ db.createCollection("orders", {
           minItems: 1,
           items: {
             bsonType: "object",
-            required: ["product_id", "product_type", "artist_id", "unit_price", "quantity"],
+            required: [
+              "product_id",
+              "product_type",
+              "artist_id",
+              "unit_price",
+              "quantity",
+            ],
             properties: {
               product_id: { bsonType: "objectId" },
               product_type: { enum: ["single", "album", "merch"] },
@@ -264,13 +272,20 @@ db.createCollection("orders", {
               quantity: { bsonType: "int", minimum: 1 },
               variant_id: { bsonType: ["objectId", "null"] },
               fulfillment_status: {
-                enum: ["digital_delivered", "pending", "preparing", "shipped", "delivered", "cancelled"]
+                enum: [
+                  "digital_delivered",
+                  "pending",
+                  "preparing",
+                  "shipped",
+                  "delivered",
+                  "cancelled",
+                ],
               },
               tracking_number: { bsonType: ["string", "null"] },
               shipped_at: { bsonType: ["date", "null"] },
-              delivered_at: { bsonType: ["date", "null"] }
-            }
-          }
+              delivered_at: { bsonType: ["date", "null"] },
+            },
+          },
         },
         subtotal: { bsonType: "int" },
         shipping_cost: { bsonType: "int" },
@@ -278,21 +293,28 @@ db.createCollection("orders", {
         total: { bsonType: "int" },
         currency: { bsonType: "string" },
         status: {
-          enum: ["pending_payment", "paid", "partially_shipped", "fully_shipped", "completed", "cancelled", "refunded"]
+          enum: [
+            "pending_payment",
+            "paid",
+            "partially_shipped",
+            "fully_shipped",
+            "completed",
+            "cancelled",
+            "refunded",
+          ],
         },
         shipping_address: { bsonType: "object" },
         created_at: { bsonType: "date" },
-        updated_at: { bsonType: "date" }
-      }
-    }
-  }
+        updated_at: { bsonType: "date" },
+      },
+    },
+  },
 });
 db.orders.createIndex({ user_id: 1, created_at: -1 });
 db.orders.createIndex({ status: 1 });
 db.orders.createIndex({ created_at: -1 });
 db.orders.createIndex({ "items.artist_id": 1, "items.fulfillment_status": 1 });
 print("✅ orders collection created");
-
 
 // =============================================================================
 // SCHEMA CREATION COMPLETE
