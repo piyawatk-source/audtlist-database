@@ -18,7 +18,6 @@
 //    - 1 order (มาลีซื้อทั้ง 3 รายการ)
 // =============================================================================
 
-
 // -----------------------------------------------------------------------------
 // 1. GENRES — 10 master data
 // -----------------------------------------------------------------------------
@@ -32,10 +31,9 @@ db.genres.insertMany([
   { name: "Metal", slug: "metal", created_at: new Date() },
   { name: "Indie", slug: "indie", created_at: new Date() },
   { name: "R&B", slug: "rnb", created_at: new Date() },
-  { name: "Classical", slug: "classical", created_at: new Date() }
+  { name: "Classical", slug: "classical", created_at: new Date() },
 ]);
 print("✅ Inserted 10 genres");
-
 
 // -----------------------------------------------------------------------------
 // 2. USERS — admin + artist + customer
@@ -49,7 +47,7 @@ db.users.insertMany([
     display_name: "System Admin",
     status: "active",
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   },
   {
     username: "owv_band",
@@ -59,7 +57,7 @@ db.users.insertMany([
     display_name: "Old World Vultures",
     status: "active",
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   },
   {
     username: "malee_fan",
@@ -69,11 +67,10 @@ db.users.insertMany([
     display_name: "มาลี",
     status: "active",
     created_at: new Date(),
-    updated_at: new Date()
-  }
+    updated_at: new Date(),
+  },
 ]);
 print("✅ Inserted 3 users (admin + artist + customer)");
-
 
 // -----------------------------------------------------------------------------
 // 3. ARTISTS — Old World Vultures (พร้อม marketplace fields)
@@ -96,21 +93,20 @@ db.artists.insertOne({
     line2: "แขวงลาดพร้าว",
     city: "กรุงเทพ",
     postal_code: "10230",
-    country: "TH"
+    country: "TH",
   },
   payout_method: {
     type: "promptpay",
     account_info: {
       phone_number: "0812345678",
-      account_name: "Old World Vultures"
-    }
+      account_name: "Old World Vultures",
+    },
   },
   payout_balance: 0,
   created_at: new Date(),
-  updated_at: new Date()
+  updated_at: new Date(),
 });
 print("✅ Inserted artist: Old World Vultures");
-
 
 // -----------------------------------------------------------------------------
 // 4. PRODUCTS — 3 ตัว (single + album + merch)
@@ -130,7 +126,7 @@ db.products.insertMany([
     status: "published",
     deleted_at: null,
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   },
   {
     artist_id: owvArtist._id,
@@ -144,7 +140,7 @@ db.products.insertMany([
     status: "published",
     deleted_at: null,
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   },
   {
     artist_id: owvArtist._id,
@@ -158,11 +154,10 @@ db.products.insertMany([
     status: "published",
     deleted_at: null,
     created_at: new Date(),
-    updated_at: new Date()
-  }
+    updated_at: new Date(),
+  },
 ]);
 print("✅ Inserted 3 products (single + album + merch)");
-
 
 // -----------------------------------------------------------------------------
 // 5. TRACKS — 4 เพลง (Crimson Dawn + 3 เพลงในอัลบั้ม)
@@ -177,8 +172,7 @@ db.tracks.insertOne({
   audio_file_url: "https://example.com/audio/crimson-dawn-full.flac",
   preview_url: "https://example.com/audio/crimson-dawn-preview.mp3",
   is_streamable: true,
-  is_active: true,
-  created_at: new Date()
+  created_at: new Date(),
 });
 
 // Tracks ของ album — ใช้ product_id ของ album (3 เพลง)
@@ -189,8 +183,7 @@ db.tracks.insertMany([
     audio_file_url: "https://example.com/audio/midnight-full.flac",
     preview_url: "https://example.com/audio/midnight-preview.mp3",
     is_streamable: true,
-    is_active: true,
-    created_at: new Date()
+    created_at: new Date(),
   },
   {
     product_id: new ObjectId(),
@@ -198,8 +191,7 @@ db.tracks.insertMany([
     audio_file_url: "https://example.com/audio/shadow-full.flac",
     preview_url: "https://example.com/audio/shadow-preview.mp3",
     is_streamable: true,
-    is_active: true,
-    created_at: new Date()
+    created_at: new Date(),
   },
   {
     product_id: new ObjectId(),
@@ -207,27 +199,26 @@ db.tracks.insertMany([
     audio_file_url: "https://example.com/audio/whisper-full.flac",
     preview_url: "https://example.com/audio/whisper-preview.mp3",
     is_streamable: true,
-    is_active: true,
-    created_at: new Date()
-  }
+    created_at: new Date(),
+  },
 ]);
 print("✅ Inserted 4 tracks");
-
 
 // -----------------------------------------------------------------------------
 // 6. ALBUMS — Midnight Echoes (Many-to-Many กับ tracks)
 // -----------------------------------------------------------------------------
 const allTracks = db.tracks.find().toArray();
-const trackIds = allTracks.map(t => t._id);
+const trackIds = allTracks.map((t) => t._id);
 
 db.albums.insertOne({
   product_id: albumProduct._id,
   release_date: new Date("2026-01-15"),
   track_ids: trackIds,
-  created_at: new Date()
+  created_at: new Date(),
 });
-print("✅ Inserted album: Midnight Echoes (with " + trackIds.length + " tracks)");
-
+print(
+  "✅ Inserted album: Midnight Echoes (with " + trackIds.length + " tracks)",
+);
 
 // -----------------------------------------------------------------------------
 // 7. MERCH — Exquisite Cadaver Shirt (พร้อม variants 2 ขนาด)
@@ -245,27 +236,26 @@ db.merch.insertOne({
       size: "M",
       color: "black",
       stock_quantity: 25,
-      sku: "EC-SHIRT-M-BLK"
+      sku: "EC-SHIRT-M-BLK",
     },
     {
       variant_id: new ObjectId(),
       size: "L",
       color: "black",
       stock_quantity: 18,
-      sku: "EC-SHIRT-L-BLK"
-    }
+      sku: "EC-SHIRT-L-BLK",
+    },
   ],
-  created_at: new Date()
+  created_at: new Date(),
 });
 print("✅ Inserted merch: Cadaver Shirt (M, L sizes)");
-
 
 // -----------------------------------------------------------------------------
 // 8. ORDERS — Scenario มาลีซื้อ 3 รายการ
 // -----------------------------------------------------------------------------
 const malee = db.users.findOne({ username: "malee_fan" });
 const shirtMerch = db.merch.findOne({ product_id: shirtProduct._id });
-const variantM = shirtMerch.variants.find(v => v.sku === "EC-SHIRT-M-BLK");
+const variantM = shirtMerch.variants.find((v) => v.sku === "EC-SHIRT-M-BLK");
 
 // คำนวณราคา:
 // Subtotal = 30 + 250 + 980 = 1,260
@@ -288,7 +278,7 @@ db.orders.insertOne({
       fulfillment_status: "digital_delivered",
       tracking_number: null,
       shipped_at: null,
-      delivered_at: new Date()
+      delivered_at: new Date(),
     },
     {
       product_id: albumProduct._id,
@@ -301,7 +291,7 @@ db.orders.insertOne({
       fulfillment_status: "digital_delivered",
       tracking_number: null,
       shipped_at: null,
-      delivered_at: new Date()
+      delivered_at: new Date(),
     },
     {
       product_id: shirtProduct._id,
@@ -314,8 +304,8 @@ db.orders.insertOne({
       fulfillment_status: "pending",
       tracking_number: null,
       shipped_at: null,
-      delivered_at: null
-    }
+      delivered_at: null,
+    },
   ],
   subtotal: 1260,
   shipping_cost: 100,
@@ -329,13 +319,12 @@ db.orders.insertOne({
     line2: "เขตจตุจักร",
     city: "กรุงเทพ",
     postal_code: "10400",
-    country: "TH"
+    country: "TH",
   },
   created_at: new Date(),
-  updated_at: new Date()
+  updated_at: new Date(),
 });
 print("✅ Inserted order (มาลี: 3 items)");
-
 
 // -----------------------------------------------------------------------------
 // 9. POST-ORDER ACTIONS — ลด stock + เพิ่ม payout balance
@@ -348,11 +337,11 @@ db.merch.updateOne(
     variants: {
       $elemMatch: {
         sku: "EC-SHIRT-M-BLK",
-        stock_quantity: { $gte: 1 }
-      }
-    }
+        stock_quantity: { $gte: 1 },
+      },
+    },
   },
-  { $inc: { "variants.$.stock_quantity": -1 } }
+  { $inc: { "variants.$.stock_quantity": -1 } },
 );
 print("✅ Reduced stock of EC-SHIRT-M-BLK by 1");
 
@@ -361,11 +350,10 @@ db.artists.updateOne(
   { _id: owvArtist._id },
   {
     $inc: { payout_balance: 1071 },
-    $set: { updated_at: new Date() }
-  }
+    $set: { updated_at: new Date() },
+  },
 );
 print("✅ Added 1,071 THB to OWV payout balance");
-
 
 // =============================================================================
 // SAMPLE DATA INSERTION COMPLETE

@@ -166,7 +166,6 @@ db.createCollection("tracks", {
         audio_file_url: { bsonType: "string" },
         preview_url: { bsonType: "string" },
         is_streamable: { bsonType: "bool" },
-        is_active: { bsonType: "bool" },
         created_at: { bsonType: "date" },
       },
     },
