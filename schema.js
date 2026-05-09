@@ -88,12 +88,14 @@ db.createCollection("artists", {
         // Marketplace fields
         shipping_address: {
           bsonType: "object",
+          required: ["line1", "city", "postal_code", "country"],
           properties: {
             line1: { bsonType: "string" },
             line2: { bsonType: "string" },
             city: { bsonType: "string" },
             postal_code: { bsonType: "string" },
             country: { bsonType: "string" },
+            phone: { bsonType: "string" },
           },
         },
         payout_method: {
@@ -293,7 +295,25 @@ db.createCollection("orders", {
             "refunded",
           ],
         },
-        shipping_address: { bsonType: "object" },
+        shipping_address: {
+          bsonType: "object",
+          required: [
+            "recipient_name",
+            "line1",
+            "city",
+            "postal_code",
+            "country",
+          ],
+          properties: {
+            recipient_name: { bsonType: "string" },
+            line1: { bsonType: "string" },
+            line2: { bsonType: "string" },
+            city: { bsonType: "string" },
+            postal_code: { bsonType: "string" },
+            country: { bsonType: "string" },
+            phone: { bsonType: "string" },
+          },
+        },
         created_at: { bsonType: "date" },
         updated_at: { bsonType: "date" },
       },
