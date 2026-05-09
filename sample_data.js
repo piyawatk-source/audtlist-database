@@ -87,7 +87,6 @@ db.artists.insertOne({
   location: "Bangkok, Thailand",
   banner_url: "https://example.com/banners/owv.jpg",
   genre_ids: [rockGenre._id, indieGenre._id],
-  status: "active",
   shipping_address: {
     line1: "123 ซ.ลาดพร้าว 71",
     line2: "แขวงลาดพร้าว",

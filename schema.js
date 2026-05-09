@@ -85,7 +85,6 @@ db.createCollection("artists", {
           bsonType: "array",
           items: { bsonType: "objectId" },
         },
-        status: { enum: ["active", "inactive", "deleted", "banned"] },
         // Marketplace fields
         shipping_address: {
           bsonType: "object",
@@ -114,7 +113,6 @@ db.createCollection("artists", {
 db.artists.createIndex({ slug: 1 }, { unique: true });
 db.artists.createIndex({ user_id: 1 }, { unique: true });
 db.artists.createIndex({ genre_ids: 1 });
-db.artists.createIndex({ status: 1 });
 print("✅ artists collection created");
 
 // -----------------------------------------------------------------------------

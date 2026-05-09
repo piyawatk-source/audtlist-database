@@ -58,7 +58,6 @@ db.artists.insertOne({
   location: "Chiang Mai, Thailand",
   banner_url: "https://example.com/banners/velvet-crows.jpg",
   genre_ids: genreIds,
-  status: "active",
   shipping_address: {
     line1: "88/5 ถ.นิมมานเหมินทร์ ซอย 7",
     line2: "ต.สุเทพ อ.เมือง",
