@@ -238,6 +238,7 @@ const albumProducts = albumData.map((a) => ({
   price: a.price,
   name_your_price: false,
   cover_url: `https://example.com/covers/vc-${a.slug}.jpg`,
+  release_date: a.release_date,
   status: "published",
   deleted_at: null,
   created_at: new Date(),
@@ -267,7 +268,6 @@ const albumDocs = albumData.map((a) => {
   const trackIds = a.track_titles.map((title) => titleToTrack[title]._id);
   return {
     product_id: product._id,
-    release_date: a.release_date,
     track_ids: trackIds,
     created_at: new Date(),
   };

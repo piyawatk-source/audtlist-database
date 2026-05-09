@@ -134,6 +134,7 @@ db.createCollection("products", {
         min_price: { bsonType: "int", minimum: 0 },
         name_your_price: { bsonType: "bool" },
         cover_url: { bsonType: "string" },
+        release_date: { bsonType: "date" },
         status: {
           enum: ["draft", "published", "private", "unavailable", "deleted"],
         },
@@ -182,7 +183,6 @@ db.createCollection("albums", {
       required: ["product_id", "track_ids", "created_at"],
       properties: {
         product_id: { bsonType: "objectId" },
-        release_date: { bsonType: "date" },
         track_ids: {
           bsonType: "array",
           items: { bsonType: "objectId" },
