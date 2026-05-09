@@ -253,16 +253,9 @@ db.createCollection("orders", {
           minItems: 1,
           items: {
             bsonType: "object",
-            required: [
-              "product_id",
-              "product_type",
-              "artist_id",
-              "unit_price",
-              "quantity",
-            ],
+            required: ["product_id", "artist_id", "unit_price", "quantity"],
             properties: {
               product_id: { bsonType: "objectId" },
-              product_type: { enum: ["single", "album", "merch"] },
               artist_id: { bsonType: "objectId" },
               title_snapshot: { bsonType: "string" },
               unit_price: { bsonType: "int", minimum: 0 },

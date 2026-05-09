@@ -268,7 +268,6 @@ db.orders.insertOne({
   items: [
     {
       product_id: singleProduct._id,
-      product_type: "single",
       artist_id: owvArtist._id,
       title_snapshot: "Crimson Dawn (Single)",
       unit_price: 30,
@@ -281,7 +280,6 @@ db.orders.insertOne({
     },
     {
       product_id: albumProduct._id,
-      product_type: "album",
       artist_id: owvArtist._id,
       title_snapshot: "Midnight Echoes",
       unit_price: 250,
@@ -294,7 +292,6 @@ db.orders.insertOne({
     },
     {
       product_id: shirtProduct._id,
-      product_type: "merch",
       artist_id: owvArtist._id,
       title_snapshot: "Exquisite Cadaver Shirt",
       unit_price: 980,
