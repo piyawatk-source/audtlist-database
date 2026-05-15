@@ -85,16 +85,17 @@ db.createCollection("artists", {
           bsonType: "array",
           items: { bsonType: "objectId" },
         },
-        status: { enum: ["active", "inactive", "deleted", "banned"] },
         // Marketplace fields
         shipping_address: {
           bsonType: "object",
+          required: ["line1", "city", "postal_code", "country"],
           properties: {
             line1: { bsonType: "string" },
             line2: { bsonType: "string" },
             city: { bsonType: "string" },
             postal_code: { bsonType: "string" },
             country: { bsonType: "string" },
+            phone: { bsonType: "string" },
           },
         },
         payout_method: {
@@ -114,7 +115,6 @@ db.createCollection("artists", {
 db.artists.createIndex({ slug: 1 }, { unique: true });
 db.artists.createIndex({ user_id: 1 }, { unique: true });
 db.artists.createIndex({ genre_ids: 1 });
-db.artists.createIndex({ status: 1 });
 print("✅ artists collection created");
 
 // -----------------------------------------------------------------------------
@@ -136,6 +136,7 @@ db.createCollection("products", {
         min_price: { bsonType: "int", minimum: 0 },
         name_your_price: { bsonType: "bool" },
         cover_url: { bsonType: "string" },
+        release_date: { bsonType: "date" },
         status: {
           enum: ["draft", "published", "private", "unavailable", "deleted"],
         },
@@ -166,7 +167,6 @@ db.createCollection("tracks", {
         audio_file_url: { bsonType: "string" },
         preview_url: { bsonType: "string" },
         is_streamable: { bsonType: "bool" },
-        is_active: { bsonType: "bool" },
         created_at: { bsonType: "date" },
       },
     },
@@ -185,7 +185,6 @@ db.createCollection("albums", {
       required: ["product_id", "track_ids", "created_at"],
       properties: {
         product_id: { bsonType: "objectId" },
-        release_date: { bsonType: "date" },
         track_ids: {
           bsonType: "array",
           items: { bsonType: "objectId" },
@@ -256,16 +255,9 @@ db.createCollection("orders", {
           minItems: 1,
           items: {
             bsonType: "object",
-            required: [
-              "product_id",
-              "product_type",
-              "artist_id",
-              "unit_price",
-              "quantity",
-            ],
+            required: ["product_id", "artist_id", "unit_price", "quantity"],
             properties: {
               product_id: { bsonType: "objectId" },
-              product_type: { enum: ["single", "album", "merch"] },
               artist_id: { bsonType: "objectId" },
               title_snapshot: { bsonType: "string" },
               unit_price: { bsonType: "int", minimum: 0 },
@@ -303,7 +295,25 @@ db.createCollection("orders", {
             "refunded",
           ],
         },
-        shipping_address: { bsonType: "object" },
+        shipping_address: {
+          bsonType: "object",
+          required: [
+            "recipient_name",
+            "line1",
+            "city",
+            "postal_code",
+            "country",
+          ],
+          properties: {
+            recipient_name: { bsonType: "string" },
+            line1: { bsonType: "string" },
+            line2: { bsonType: "string" },
+            city: { bsonType: "string" },
+            postal_code: { bsonType: "string" },
+            country: { bsonType: "string" },
+            phone: { bsonType: "string" },
+          },
+        },
         created_at: { bsonType: "date" },
         updated_at: { bsonType: "date" },
       },
